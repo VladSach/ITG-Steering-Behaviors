@@ -2,19 +2,29 @@
 #define HUNTER_H
 
 #include "Config.h"
+#include "Bullet.h"
+#include "utility.h"
 
 class Hunter {
 private:
-    int x = 0;
-    int y = 0;
+    float radius = 25.f;
+    vector2f position;
+
+    Bullet bullet;
     int bulletsCnt = 0;
 public:
-    Hunter(Config &config) {
-        bulletsCnt = config.hunterBulletsAmount;
-    };
+    Hunter(Config &config);
 
-    void move();
-    void shoot();
+    void move(float x, float y);
+    void shoot(const vector2f &aimDirNorm);
+
+    bool haveShot();
+    float getRadius();
+    vector2f getPosition();
+    vector2f getPositionCenter();
+    int getBulletsCnt();
+
+    Bullet *getBullet();
 };
 
-#endif
+#endif // HUNTER_H

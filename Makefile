@@ -1,15 +1,19 @@
 # Set project directory one level above of Makefile directory.
 # $(CURDIR) is a GNU make variable containing the path to the current working directory
 PROJDIR := $(realpath $(CURDIR))
+
 SOURCEDIR := $(PROJDIR)/src
 INCLUDEDIR := $(PROJDIR)/include
 BUILDDIR := $(PROJDIR)/obj
+
+COMPILERFLAGS := -g -Wall
+LINKERFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
 
 # Name of the final executable
 TARGET = main
 
 # Create the list of directories
-DIRS = Controller Model View
+DIRS = Controller Model View Utility
 SOURCEDIRS = $(foreach dir, $(DIRS), $(addprefix $(SOURCEDIR)/, $(dir)))
 TARGETDIRS = $(foreach dir, $(DIRS), $(addprefix $(BUILDDIR)/, $(dir)))
 
@@ -50,7 +54,7 @@ PSEP = $(strip $(SEP))
 define generateRules
 $(1)/%.o: %.cpp
 	@echo Building $$@
-	@$(CC) -c $$(INCLUDES) -o $$(subst /,$$(PSEP),$$@) $$(subst /,$$(PSEP),$$<)
+	@$(CC) $(COMPILERFLAGS) $(LINKERFLAGS) -c $$(INCLUDES) -o $$(subst /,$$(PSEP),$$@) $$(subst /,$$(PSEP),$$<)
 endef
 
 .PHONY: all clean directories
@@ -59,7 +63,7 @@ all: directories $(TARGET)
 
 $(TARGET): $(OBJS)
 	echo Linking $@
-	@$(CC) $(OBJS) -o $(TARGET)
+	@$(CC) $(COMPILERFLAGS) $(LINKERFLAGS) $(OBJS) -o $(TARGET)
 
 # Generate rules 
 $(foreach targetdir, $(TARGETDIRS), $(eval $(call generateRules, $(targetdir))))
@@ -71,7 +75,7 @@ directories:
 clean:
 	@$(RMDIR) $(subst /,$(PSEP),$(TARGETDIRS)) $(ERRIGNORE)
 	@$(RM) $(TARGET) $(ERRIGNORE)
-	@echo Cleaning done !
+	@echo Cleaning done!
 
 # Run executable
 run:
