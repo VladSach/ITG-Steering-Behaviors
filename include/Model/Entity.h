@@ -20,7 +20,6 @@ public:
     virtual void move(float x, float y) = 0;
     virtual void die()                  = 0;
 
-
     virtual bool     getIsAlive()       = 0;
     virtual float    getRadius()        = 0;
     virtual float    getVelocityLimit() = 0;

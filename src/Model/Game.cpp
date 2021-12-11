@@ -20,6 +20,8 @@ void Game::initGame() {
         animals.push_back(rabbit);
     }
 
+    animals.push_back(&hunter);
+
     notifyUpdate();
 }
 
@@ -29,44 +31,17 @@ void Game::update(time64 dt) {
         animal->update(animals, dt);
     }
 
-    // Bullet update
-    hunter.getBullet()->move();
-
     collisionDetection();
 
     notifyUpdate();
 }
 
 void Game::moveHunter(direction dir, time64 dt) {
-    // TODO: Change to vector movement
-    switch (dir) {
-    case left:
-        hunter.move(-10.f, 0.f);
-        break;
-
-    case right:
-        hunter.move(10.f, 0.f);
-        break;
-
-    case up:
-        hunter.move(0.f, -10.f);
-        break;
-
-    case down:
-        hunter.move(0.f, 10.f);
-        break;
-
-    default:
-        break;
-    }
-
-    notifyUpdate();
-    update(dt);
+    hunter.changeVelocity(dir, dt);
 }
 
 void Game::hunterShoot(float mouseX, float mouseY, time64 dt) {
-    if (!hunter.getBulletsCnt() || isShot()) {
-        notifyUpdate();
+    if (!hunter.getBulletsCnt() || isShot() || !hunter.getIsAlive()) {
         return;
     }
 
@@ -81,9 +56,6 @@ void Game::hunterShoot(float mouseX, float mouseY, time64 dt) {
     vector2f aimDirNorm = normalize(aimDir);
 
     hunter.shoot(aimDirNorm);
-
-    notifyUpdate();
-    update(dt);
 }
 
 void Game::collisionDetection() {
@@ -98,6 +70,7 @@ void Game::collisionDetection() {
                 animal->die();
             }
 
+        if (animal == &hunter) continue;
         // Bullet collision
         if (isShot()) {
             vector2f distance = animal->getCenter() - hunter.getBullet()->getCenter();
@@ -130,7 +103,7 @@ vector2f Game::getHunterPosition() {
 }
 
 vector2f Game::getHunterCenter() {
-    return hunter.getPositionCenter();
+    return hunter.getCenter();
 }
 
 int Game::getHunterBulletsCounter() {

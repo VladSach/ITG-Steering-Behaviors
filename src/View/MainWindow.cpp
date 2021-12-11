@@ -41,8 +41,13 @@ void MainWindow::update()
     float hY = m_Model->getHunterPosition().y;
 
     sf::CircleShape hunter(m_Model->getHunterRadius());
-    hunter.setFillColor(sf::Color::Blue);
     hunter.setPosition(sf::Vector2f(hX, hY));
+
+    if (m_Model->getIsHunterAlive()) {
+        hunter.setFillColor(sf::Color::Blue);
+    } else {
+        hunter.setFillColor(sf::Color::Transparent);
+    }
     m_Window.draw(hunter);
 
     // Draw bullet

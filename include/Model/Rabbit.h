@@ -9,11 +9,11 @@
 
 class Rabbit : public Entity {
 private:
-    float radius        = 15.f;
-    float dangerRadius  = 50.f;
-    float velocityLimit = 3.f;
-    float steeringLimit = 5.f;
     bool  isAlive       = true;
+    float radius        = 15.f;
+    float dangerRadius  = 100.f;
+    float velocityLimit = 30.f;
+    float steeringLimit = 5.f;
 
     vector2f position;
     vector2f velocity;

@@ -10,17 +10,14 @@ void Controller::start() {
     sf::Window &window = *(m_window->getWindow());
 
     sf::Clock clock;
-    float timer = 0;
 
     while (window.isOpen()) {
         sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
 
         float time = clock.getElapsedTime().asSeconds() * 1000;
-        timer += time;
         
-        // float dtime = (float)(SDL_GetTicks() - last_update) / 1000.0f;
-        // TODO: Change 60 to config.FPS
-        if (clock.getElapsedTime().asSeconds() >= 1/60)
+        // TODO: Change 120 to config.FPS * 2
+        if (clock.getElapsedTime().asSeconds() >= 1/120)
             m_model->update(time);                     
                                             
         sf::Event event;

@@ -3,28 +3,36 @@
 
 #include "Config.h"
 #include "Bullet.h"
+#include "Entity.h"
 #include "utility.h"
 
-class Hunter {
+class Hunter : public Entity {
 private:
-    float radius = 25.f;
+    bool  isAlive       = true;
+    float radius        = 20.f;
+    float velocityLimit = 20.f;
     vector2f position;
-    bool isAlive = true;
+    vector2f velocity;
 
     Bullet bullet;
     int bulletsCnt = 0;
 public:
     Hunter(Config &config);
 
+    void update(std::vector<Entity*> animals, time64 dt);
+    void changeVelocity(direction dir, time64 dt);
     void move(float x, float y);
     void shoot(const vector2f &aimDirNorm);
+    void die();
 
-    bool haveShot();
-    float getRadius();
+    bool     haveShot();
+    bool     getIsAlive();
+    float    getRadius();
+    float    getVelocityLimit();
+    vector2f getCenter();
     vector2f getPosition();
-    vector2f getPositionCenter();
-    int getBulletsCnt();
-    bool getIsAlive();
+    vector2f getVelocity();
+    int      getBulletsCnt();
 
     Bullet *getBullet();
 };
