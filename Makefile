@@ -13,7 +13,7 @@ LINKERFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
 TARGET = main
 
 # Create the list of directories
-DIRS = Controller Model View Utility
+DIRS = Behaviors Controller Model View Utility
 SOURCEDIRS = $(foreach dir, $(DIRS), $(addprefix $(SOURCEDIR)/, $(dir)))
 TARGETDIRS = $(foreach dir, $(DIRS), $(addprefix $(BUILDDIR)/, $(dir)))
 

@@ -9,21 +9,20 @@ Controller::Controller(Game *game, MainWindow *window) {
 void Controller::start() {
     sf::Window &window = *(m_window->getWindow());
 
+    sf::Clock clock;
+    float timer = 0;
+
     while (window.isOpen()) {
         sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
 
-        // ! Move this to game
-        sf::Vector2f hunterCenter = sf::Vector2f(m_model->getHunterCenter().x,
-                                                 m_model->getHunterCenter().y);
-
-        // Line between the hunter and the mouse position
-        sf::Vector2f aimDir = mousePos - hunterCenter;
+        float time = clock.getElapsedTime().asSeconds() * 1000;
+        timer += time;
         
-        // Length of vector: |V| = sqrt(V.x^2 + V.y^2)
-        // Normalize vector: |V| = V / |V|
-        sf::Vector2f aimDirNorm = aimDir / std::sqrt((aimDir.x * aimDir.x) + 
-                                                     (aimDir.y * aimDir.y));
-                                                                                
+        // float dtime = (float)(SDL_GetTicks() - last_update) / 1000.0f;
+        // TODO: Change 60 to config.FPS
+        if (clock.getElapsedTime().asSeconds() >= 1/60)
+            m_model->update(time);                     
+                                            
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -32,20 +31,20 @@ void Controller::start() {
 
             // Player movement
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-                m_model->moveHunter(left);
+                m_model->moveHunter(left, time);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-                m_model->moveHunter(right);
+                m_model->moveHunter(right, time);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-                m_model->moveHunter(up);
+                m_model->moveHunter(up, time);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-                m_model->moveHunter(down);
+                m_model->moveHunter(down, time);
 
             // Shooting
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                m_model->hunterShoot(aimDirNorm.x, aimDirNorm.y);
+                m_model->hunterShoot(mousePos.x, mousePos.y, time);
             }
         }
 
-        m_model->update();
+        clock.restart();
     }
 }

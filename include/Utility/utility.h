@@ -1,6 +1,11 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#include <SFML/Graphics.hpp>
+
+#include <cmath>
+#include <random>
+
 enum direction {
     left,
     right,
@@ -8,6 +13,10 @@ enum direction {
     down
 };
 
+typedef float time64;
+typedef sf::Vector2f vector2f;
+
+/*
 struct vector2f {
     float x;
     float y;
@@ -35,6 +44,13 @@ struct vector2f {
         return vector2f(x / number, y / number);
     }
 };
+*/
+
+int getRandomNumber(int upperBound, int lowerBound);
+
+vector2f normalize(vector2f vector);
+vector2f truncate(vector2f vector, float max);
+float deg2rad(float deg);
 
 inline int stringToInt(const char *string, const int length) {
     int result = 0;

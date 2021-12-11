@@ -26,12 +26,22 @@ void MainWindow::update()
 {
     m_Window.clear();
 
+    // Draw field
+    float fieldWidth  = m_Model->getMapSize().x;
+    float fieldHeight = m_Model->getMapSize().y;
+
+    sf::RectangleShape field(sf::Vector2f(fieldWidth, fieldHeight));
+    field.setFillColor(sf::Color(25, 62, 4)); // Dark Green
+    field.setPosition(sf::Vector2f((windowWidth - fieldWidth)   / 2,
+                                   (windowHeight - fieldHeight) / 2));
+    m_Window.draw(field);
+
     // Draw hunter
     float hX = m_Model->getHunterPosition().x;
     float hY = m_Model->getHunterPosition().y;
 
     sf::CircleShape hunter(m_Model->getHunterRadius());
-    hunter.setFillColor(sf::Color::White);
+    hunter.setFillColor(sf::Color::Blue);
     hunter.setPosition(sf::Vector2f(hX, hY));
     m_Window.draw(hunter);
 
@@ -48,6 +58,20 @@ void MainWindow::update()
         bullet.setFillColor(sf::Color::Transparent);
     }
     m_Window.draw(bullet);
+
+    // Draw rabbits
+    for (auto rabbit : m_Model->getRabbits()) {
+        sf::CircleShape rabbitShape(rabbit.getRadius());
+
+        if (rabbit.getIsAlive()) {
+            rabbitShape.setFillColor(sf::Color::White);
+        } else {
+            rabbitShape.setFillColor(sf::Color::Transparent);
+        }
+        
+        rabbitShape.setPosition(rabbit.getPosition());
+        m_Window.draw(rabbitShape);
+    }
 
     m_Window.display();
 }

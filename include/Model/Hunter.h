@@ -9,6 +9,7 @@ class Hunter {
 private:
     float radius = 25.f;
     vector2f position;
+    bool isAlive = true;
 
     Bullet bullet;
     int bulletsCnt = 0;
@@ -23,6 +24,7 @@ public:
     vector2f getPosition();
     vector2f getPositionCenter();
     int getBulletsCnt();
+    bool getIsAlive();
 
     Bullet *getBullet();
 };

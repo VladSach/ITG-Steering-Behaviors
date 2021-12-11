@@ -45,3 +45,7 @@ int Hunter::getBulletsCnt() {
 Bullet *Hunter::getBullet() {
     return &bullet;
 }
+
+bool Hunter::getIsAlive() {
+    return isAlive;
+}
