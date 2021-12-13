@@ -22,7 +22,7 @@ private:
     const int desktopHeight = sf::VideoMode::getDesktopMode().height;
 
 public:
-    MainWindow(Game *game, Config &condig);
+    MainWindow(Game *game);
     ~MainWindow() = default;
 
     virtual void update();

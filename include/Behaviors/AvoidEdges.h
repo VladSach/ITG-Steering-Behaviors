@@ -14,7 +14,7 @@ private:
 public:
     AvoidEdges(Entity &parent) : animal(parent) {};
 
-    vector2f getDesiredVelocity();
+    vector2f getDesiredVelocity(std::vector<Entity*> &enemies);
 };
 
 #endif // AVOID_EDGES_H

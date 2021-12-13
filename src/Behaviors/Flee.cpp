@@ -1,8 +1,5 @@
 #include "Flee.h"
 
-// ! Change this later
-vector2f Flee::getDesiredVelocity() { return vector2f {0, 0}; }
-
 vector2f Flee::getDesiredVelocity(std::vector<Entity*> &enemies) {
     vector2f vector;
 

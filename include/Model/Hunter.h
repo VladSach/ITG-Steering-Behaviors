@@ -10,14 +10,14 @@ class Hunter : public Entity {
 private:
     bool  isAlive       = true;
     float radius        = 20.f;
-    float velocityLimit = 20.f;
+    float velocityLimit = 30.f;
     vector2f position;
     vector2f velocity;
 
     Bullet bullet;
     int bulletsCnt = 0;
 public:
-    Hunter(Config &config);
+    Hunter();
 
     void update(std::vector<Entity*> animals, time64 dt);
     void changeVelocity(direction dir, time64 dt);

@@ -3,14 +3,14 @@
 void Rabbit::update(std::vector<Entity*> animals, time64 dt) {
     std::vector<Entity*> enemies = findEnemiesNear(animals);
 
-    vector2f wanderVelocity = wander.getDesiredVelocity();
-    vector2f fleeVelocity   = flee.getDesiredVelocity(enemies);
-    vector2f edgesVelocity  = avoidEdges.getDesiredVelocity();
+    vector2f wanderVelocity = wander.getDesiredVelocity(enemies)     - velocity;
+    vector2f fleeVelocity   = flee.getDesiredVelocity(enemies)       - velocity;
+    vector2f edgesVelocity  = avoidEdges.getDesiredVelocity(enemies) - velocity;
 
     vector2f steeringForce;
-    steeringForce += wanderVelocity - velocity;
-    steeringForce += fleeVelocity   - velocity;
-    steeringForce += edgesVelocity  - velocity;
+    steeringForce = wanderVelocity * 0.7f
+                  + fleeVelocity   * 2.f
+                  + edgesVelocity  * 10.f;
 
     steeringForce = truncate(steeringForce - velocity, steeringLimit);
 

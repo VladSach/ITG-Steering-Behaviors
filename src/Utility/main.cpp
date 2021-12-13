@@ -4,11 +4,11 @@
 #include "Controller.h"
 
 int main(){
-    Config config;
-    loadConfig(config);
+    Config *config = Config::GetInstance();
+    config->loadConfig();
 
-    Game game(config);
-    MainWindow window(&game, config);
+    Game game;
+    MainWindow window(&game);
 
     Controller controller(&game, &window);
     controller.start();

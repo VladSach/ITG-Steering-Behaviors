@@ -1,15 +1,20 @@
 #include "Game.h"
 
-Game::Game(Config &config) : hunter(config){
-    mapSize.x = config.mainWindowWidth  * 3/4;
-    mapSize.y = config.mainWindowHeight * 3/4;
+Game::Game() : hunter() {
+    Config *config = Config::GetInstance();
 
-    mapOffset.x = (config.mainWindowWidth  - mapSize.x) / 2;
-    mapOffset.y = (config.mainWindowHeight - mapSize.y) / 2;
+    mapSize.x = config->mainWindowWidth  * 3/4;
+    mapSize.y = config->mainWindowHeight * 3/4;
 
-    rabbitsPopulation = config.rabbitsAmount;
-    doesPopulation    = config.doesAmount;
-    wolvesPopulation  = config.wolvesAmount;
+    mapOffset.x = (config->mainWindowWidth  - mapSize.x) / 2;
+    mapOffset.y = (config->mainWindowHeight - mapSize.y) / 2;
+
+    rabbitsPopulation = config->rabbitsAmount;
+    wolvesPopulation  = config->wolvesAmount;
+    doesFlocks        = config->doesAmount;
+    doesPerFlock      = config->doesPerFlock;
+
+    doesPopulation = doesFlocks * doesPerFlock;
 }
 
 void Game::initGame() {
@@ -18,6 +23,25 @@ void Game::initGame() {
                                     getRandomNumber(mapOffset.y, mapSize.y + mapOffset.y));
         
         animals.push_back(rabbit);
+    }
+
+    for (int i = 0; i < doesFlocks; i++) {
+        for (int j = 0; j < doesPerFlock; j++) {
+            // TODO: spawn one int random point and spawn others around it
+            Doe *doe = new Doe(getRandomNumber(mapOffset.x, mapSize.x + mapOffset.x),
+                           getRandomNumber(mapOffset.y, mapSize.y + mapOffset.y));
+
+            doe->setFlockNumber(j);
+
+            animals.push_back(doe);
+        }
+    }
+
+    for (int i = 0; i < wolvesPopulation; i++) {
+        Wolve *wolve = new Wolve(getRandomNumber(mapOffset.x, mapSize.x + mapOffset.x),
+                                 getRandomNumber(mapOffset.y, mapSize.y + mapOffset.y));
+
+        animals.push_back(wolve);
     }
 
     animals.push_back(&hunter);
@@ -70,6 +94,21 @@ void Game::collisionDetection() {
                 animal->die();
             }
 
+        // Wolves
+        int wolvesPopulationIndex = rabbitsPopulation + doesPopulation + wolvesPopulation;
+        for (int i = rabbitsPopulation + doesPopulation; i < wolvesPopulationIndex; i++) {
+            Wolve *wolve = static_cast<Wolve*>(animals[i]);
+            if (!wolve->getIsAlive() || animal == wolve) continue;
+        
+            vector2f distance = animal->getCenter() - wolve->getCenter();
+            float    radiiSum = animal->getRadius() + wolve->getRadius();
+            if ((distance.x * distance.x) + 
+                (distance.y * distance.y) <= (radiiSum * radiiSum)) {
+                    wolve->kill();
+                    animal->die();
+            }
+        }       
+
         if (animal == &hunter) continue;
         // Bullet collision
         if (isShot()) {
@@ -120,6 +159,23 @@ std::vector<Rabbit> Game::getRabbits() {
         rabbits.push_back(*static_cast<Rabbit*>(animals[i]));
     }
     return rabbits;
+}
+
+std::vector<Doe> Game::getDoes() {
+    std::vector<Doe> does;
+    for (int i = rabbitsPopulation; i < rabbitsPopulation + doesPopulation; i++) {
+        does.push_back(*static_cast<Doe*>(animals[i]));
+    }
+    return does;
+}
+
+std::vector<Wolve> Game::getWolves() {
+    std::vector<Wolve> wolves;
+    int wolvesPopulationIndex = rabbitsPopulation + doesPopulation + wolvesPopulation;
+    for (int i = rabbitsPopulation + doesPopulation; i < wolvesPopulationIndex; i++) {
+        wolves.push_back(*static_cast<Wolve*>(animals[i]));
+    }
+    return wolves;
 }
 
 float Game::getBulletRadius() {

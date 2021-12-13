@@ -7,6 +7,8 @@
 #include "Entity.h"
 #include "Config.h"
 #include "utility.h"
+#include "Doe.h"
+#include "Wolve.h"
 
 #include <vector>
 
@@ -16,13 +18,16 @@ private:
     int doesPopulation    = 0;
     int wolvesPopulation  = 0;
 
+    int doesPerFlock = 0;
+    int doesFlocks   = 0;
+
     Hunter hunter;
     std::vector<Entity*> animals;
 
     vector2f mapSize;
     vector2f mapOffset;
 public:
-    Game(Config &config);
+    Game();
 
     void initGame();
     void update(time64 dt);
@@ -41,6 +46,8 @@ public:
     bool getIsHunterAlive();
 
     std::vector<Rabbit> getRabbits();
+    std::vector<Doe>    getDoes();
+    std::vector<Wolve>  getWolves();
 
     float getBulletRadius();
     vector2f getBulletPosition();

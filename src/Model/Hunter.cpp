@@ -1,12 +1,14 @@
 #include "Hunter.h"
 
 
-Hunter::Hunter(Config &config) {
-    bulletsCnt = config.hunterBulletsAmount;
+Hunter::Hunter() {
+    Config *config = Config::GetInstance();
+
+    bulletsCnt = config->hunterBulletsAmount;
 
     // Center hunter
-    position.x = config.mainWindowWidth  / 2;
-    position.y = config.mainWindowHeight / 2;
+    position.x = config->mainWindowWidth  / 2;
+    position.y = config->mainWindowHeight / 2;
 }
 
 void Hunter::update(std::vector<Entity*> animals, time64 dt) {

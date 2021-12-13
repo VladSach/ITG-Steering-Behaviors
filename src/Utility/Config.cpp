@@ -1,6 +1,16 @@
 #include "Config.h"
 
-void loadConfig(Config& config){
+Config *Config::config_ = nullptr;
+
+Config *Config::GetInstance() {
+    if (config_ == nullptr) {
+        config_ = new Config();
+    }
+
+    return config_;
+}
+
+void Config::loadConfig(){
     std::ifstream configFile("config.ini");
 
     if (!configFile.is_open()) {
@@ -19,18 +29,20 @@ void loadConfig(Config& config){
         std::string name = line.substr(0, delimiterPos);
         std::string value = line.substr(delimiterPos + 1);
         if (name == "HunterBullets") {
-            config.hunterBulletsAmount = stringToInt(value.c_str(), 
+            hunterBulletsAmount = stringToInt(value.c_str(), 
                                                      value.length());
         } else if (name == "Rabbits") {
-            config.rabbitsAmount = stringToInt(value.c_str(), value.length());
+            rabbitsAmount = stringToInt(value.c_str(), value.length());
         } else if (name == "Does") {
-            config.doesAmount = stringToInt(value.c_str(), value.length());
+            doesAmount = stringToInt(value.c_str(), value.length());
         } else if (name == "Wolves") {
-            config.wolvesAmount = stringToInt(value.c_str(), value.length());
+            wolvesAmount = stringToInt(value.c_str(), value.length());
+        } else if (name == "DoesPerFlock") {
+            doesPerFlock = stringToInt(value.c_str(), value.length());
         } else if (name == "WindowHeight") {
-            config.mainWindowHeight = stringToInt(value.c_str(), value.length());
+            mainWindowHeight = stringToInt(value.c_str(), value.length());
         } else if (name == "WindowWidth") {
-            config.mainWindowWidth = stringToInt(value.c_str(), value.length());
+            mainWindowWidth = stringToInt(value.c_str(), value.length());
         }
     }
 }

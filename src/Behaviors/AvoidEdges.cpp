@@ -1,6 +1,6 @@
 #include "AvoidEdges.h"
 
-vector2f AvoidEdges::getDesiredVelocity() {
+vector2f AvoidEdges::getDesiredVelocity(std::vector<Entity*> &enemies) {
     float    maxSpeed = animal.getVelocityLimit() * 10;
     vector2f position = animal.getPosition();
 

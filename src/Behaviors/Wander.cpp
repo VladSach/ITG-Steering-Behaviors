@@ -1,6 +1,6 @@
 #include "Wander.h"
 
-vector2f Wander::getDesiredVelocity() {
+vector2f Wander::getDesiredVelocity(std::vector<Entity*> &enemies) {
     if (getRandomNumber(0, 1)) {
         angle += angleChangeStep;
     } else {

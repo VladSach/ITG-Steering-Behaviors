@@ -18,7 +18,7 @@ private:
 public:
     Wander(Entity &parent) : animal(parent) {};
 
-    vector2f getDesiredVelocity();
+    vector2f getDesiredVelocity(std::vector<Entity*> &enemies);
 };
 
 #endif // WANDER_H

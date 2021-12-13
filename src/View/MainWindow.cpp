@@ -1,12 +1,13 @@
 #include "MainWindow.h"
 
-MainWindow::MainWindow(Game *game, Config &config)
+MainWindow::MainWindow(Game *game)
 {
     m_Model = game;
     m_Model->addObserver(this);
+    Config *config = Config::GetInstance();
 
-    windowWidth = config.mainWindowWidth;
-    windowHeight = config.mainWindowHeight;
+    windowWidth = config->mainWindowWidth;
+    windowHeight = config->mainWindowHeight;
 
     m_Window.create(sf::VideoMode(windowWidth, windowHeight),
                     gameTitle,
@@ -76,6 +77,34 @@ void MainWindow::update()
         
         rabbitShape.setPosition(rabbit.getPosition());
         m_Window.draw(rabbitShape);
+    }
+
+    // Draw does
+    for (auto doe : m_Model->getDoes()) {
+        sf::CircleShape doeShape(doe.getRadius());
+
+        if (doe.getIsAlive()) {
+            doeShape.setFillColor(sf::Color(165, 42, 42));
+        } else {
+            doeShape.setFillColor(sf::Color::Transparent);
+        }
+        
+        doeShape.setPosition(doe.getPosition());
+        m_Window.draw(doeShape);
+    }
+
+    // Draw wolves
+    for (auto wolve : m_Model->getWolves()) {
+        sf::CircleShape wolveShape(wolve.getRadius());
+
+        if (wolve.getIsAlive()) {
+            wolveShape.setFillColor(sf::Color(128,128,128));
+        } else {
+            wolveShape.setFillColor(sf::Color::Transparent);
+        }
+        
+        wolveShape.setPosition(wolve.getPosition());
+        m_Window.draw(wolveShape);
     }
 
     m_Window.display();
